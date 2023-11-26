@@ -1,0 +1,31 @@
+spin_manifest_version = 2
+
+[application]
+authors = ["Anderson Cançado <andycancado@gmail.com>"]
+description = "Advent of code 2023 in spinwasm"
+name = "aoc_gb"
+version = "0.1.0"
+
+[[trigger.http]]
+route = "/..."
+component = "ui"
+
+[component.ui]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+files = [{ source = "ui/out/", destination = "/" }]
+exclude_files = ["ui/**/node_modules"]
+
+[component.ui.build]
+command = "cd ui && npm run build"
+
+[[trigger.http]]
+route = "/api/..."
+component = "api"
+
+[component.api]
+source = "api/target/wasm32-wasi/release/api.wasm"
+allowed_outbound_hosts = []
+[component.api.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "api"
+watch = ["src/**/*.rs", "Cargo.toml"]
