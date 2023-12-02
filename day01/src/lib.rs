@@ -1,7 +1,7 @@
-use spin_sdk::http::{IntoResponse, Request, Params, Response, Router};
-use spin_sdk::{http_component};
-use std::str::FromStr;
 use anyhow::Result;
+use spin_sdk::http::{IntoResponse, Params, Request, Response, Router};
+use spin_sdk::http_component;
+use std::str::FromStr;
 
 fn read_file(path: &str) -> String {
     let input = std::fs::read_to_string(path).expect("Error reading input.txt");
@@ -49,8 +49,8 @@ impl FromStr for Number<u32> {
     }
 }
 
-fn get_pt1(_req: Request, _params: Params) -> Result<impl IntoResponse>  {
-    let input = read_file("input_files/input_d1.txt");
+fn get_pt1(_req: Request, _params: Params) -> Result<impl IntoResponse> {
+    let input = read_file("input_files/input_d1_1.txt");
     let mut result = Vec::new();
     for i in split_input(&input) {
         let r: Vec<u32> = i
@@ -63,11 +63,10 @@ fn get_pt1(_req: Request, _params: Params) -> Result<impl IntoResponse>  {
     }
     let res = result.iter().sum::<u32>();
     Ok(Response::new(200, res.to_string()))
-  
 }
 
-fn get_pt2(_req: Request, _params: Params) -> Result<impl IntoResponse>   {
-    let input = read_file("input_files/input_d2.txt");
+fn get_pt2(_req: Request, _params: Params) -> Result<impl IntoResponse> {
+    let input = read_file("input_files/input_d1_2.txt");
     let lns = split_input(input.as_str());
     let l: Vec<Number<u32>> = lns.iter().map(|ll| Number::from_str(ll).unwrap()).collect();
     let res = l.iter().map(|x| x.0).sum::<u32>();
@@ -78,14 +77,12 @@ fn get_pt2(_req: Request, _params: Params) -> Result<impl IntoResponse>   {
 /// A simple Spin HTTP component.
 #[http_component]
 fn handle_day01(req: Request) -> impl IntoResponse {
-
     let mut router = Router::new();
     router.get("/day1/pt1", get_pt1);
     router.get("/day1/pt2", get_pt2);
-    router.any("/api/*", not_found);
+    router.any("/day2/*", not_found);
     router.handle(req)
 }
-   
 
 fn not_found(_: Request, _: Params) -> Result<impl IntoResponse> {
     Ok(Response::new(200, "not found".to_string()))
