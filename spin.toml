@@ -42,3 +42,17 @@ allowed_outbound_hosts = []
 command = "cargo build --target wasm32-wasi --release"
 workdir = "day01"
 watch = ["src/**/*.rs", "Cargo.toml"]
+
+[[trigger.http]]
+route = "/day2/..."
+component = "day2"
+
+[component.day2]
+source = "day2/target/wasm32-wasi/release/day2.wasm"
+files = [ "input_files/*.txt", { source = "input_files/", destination = "/input_files/" } ]
+
+allowed_outbound_hosts = []
+[component.day2.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "day2"
+watch = ["src/**/*.rs", "Cargo.toml"]
