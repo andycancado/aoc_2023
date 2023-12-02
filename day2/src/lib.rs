@@ -67,7 +67,7 @@ impl FromStr for GameDay2 {
 }
 
 fn get_pt1(_req: Request, _params: Params) -> Result<impl IntoResponse> {
-    let f_txt = read_file("input_files/input_d2_2.txt");
+    let f_txt = read_file("input_files/input_d2_1.txt");
     let f_split = split_input(&f_txt);
     let res: i32 = f_split
         .iter()
